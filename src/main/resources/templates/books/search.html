@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Search</title>
+</head>
+<body>
+<form th:method="POST" th:action="@{/books/search}">
+  <label for="query">Enter book: </label>
+  <input type="text" id="query" name="query"/><br/>
+  <input type="submit" value="Search!"/>
+</form>
+
+
+<div th:if="${books.isEmpty()}">
+    <p>No books with this title</p>
+</div>
+
+<div th:if="${!books.isEmpty()}">
+    <p>Books: </p>
+    <div th:each="book : ${books}">
+        <br>
+        <a th:text="${book.getName() + ', ' + book.getAuthor() + ', ' + book.getYear()}">user</a><br>
+        <div th:if="${book.getOwner() == null}">
+            <p>Books is available</p>
+            <a th:href="@{/books/{id}(id=${book.getId()})}"
+               th:text="${'Book name: ' + book.getName() + ', ' + book.getAuthor() + ', ' + book.getYear()}">
+            </a>
+        </div>
+        <div th:if="${book.getOwner() != null}">
+            <p>Book doesn't available</p>
+            <a th:text="${'Owner: ' + book.getOwner().getName() + ' ' + book.getOwner().getAge()}"></a>
+            <a th:href="@{/people/{id}(id=${book.getOwner().getId()})}"></a>
+        </div>
+        <br/>
+    </div>
+</div>
+
+</body>
+</html>
